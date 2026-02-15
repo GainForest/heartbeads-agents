@@ -25,7 +25,7 @@ hb show <id> --json
 
 # 1. Only allowed files touched?
 git log --oneline -1 --grep="<id>" && git show <hash> --stat
-# 2. Acceptance test still passes? (read acceptance_criteria from JSON)
+# 2. Acceptance criteria still passes? (read acceptance_criteria from JSON)
 <command from acceptance_criteria field>
 # 3. No regressions?
 <project test suite>
@@ -53,7 +53,7 @@ hb update <id> --add-label needs-redecomp
 hb update <id> --add-label integration-risk
 ```
 
-**Acceptance test itself looks wrong** → flag it:
+**Acceptance criteria look wrong** → flag it:
 ```bash
 hb update <id> --add-label test-suspect
 ```

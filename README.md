@@ -8,7 +8,7 @@ Three roles, one shared DAG, no lateral communication between agents.
 
 | Agent | Mode | Model | Does | Doesn't |
 |-------|------|-------|------|---------|
-| **Lead** | primary | Opus | Decomposes work into specs with acceptance tests | Write implementation code |
+| **Lead** | primary | Opus | Decomposes work into specs with acceptance criteria | Write implementation code |
 | **Reviewer** | subagent | Sonnet | Reviews closed work, files issues for problems | Gate merges or rewrite code |
 | **Worker** | subagent | Sonnet | Claims one issue, implements it, closes it | Refactor outside scope or add dependencies |
 
@@ -60,9 +60,9 @@ Break this feature into tasks...
 
 ## How It Works
 
-**Lead** writes hyper-specific issue specs with acceptance tests. Epics get `-d` descriptions with goals and context. Tasks get structured specs in `-d`, a machine-readable test in `--acceptance`, a time budget via `-e 60`, and scope labels via `-l`. The spec quality determines system throughput — a good spec means the worker finishes in under an hour with zero questions.
+**Lead** writes hyper-specific issue specs with acceptance criteria. Epics get `-d` descriptions with goals and context. Tasks get structured specs in `-d`, machine-readable acceptance criteria in `--acceptance`, a time budget via `-e 60`, and scope labels via `-l`. The spec quality determines system throughput — a good spec means the worker finishes in under an hour with zero questions.
 
-**Worker** claims one issue (`hb update <id> --claim`), reads the spec and `acceptance_criteria` field, implements in only the listed files, runs the acceptance test, commits, closes with the commit hash (`hb close <id> --reason "<hash> <msg>"`), and stops. Blockers are filed as new issues, not worked around.
+**Worker** claims one issue (`hb update <id> --claim`), reads the spec and `acceptance_criteria` field, implements in only the listed files, verifies the acceptance criteria, commits, closes with the commit hash (`hb close <id> --reason "<hash> <msg>"`), and stops. Blockers are filed as new issues, not worked around.
 
 **Reviewer** checks recently closed work against specs retroactively. Problems become new issues linked to the original via `discovered-from` dependency. Labels like `needs-redecomp`, `integration-risk`, and `test-suspect` are set via `--add-label`. The reviewer never reopens or rewrites — it files forward.
 
@@ -85,7 +85,7 @@ Open → In Progress (claimed) → Closed (committed)
 
 | Flag | Command | Purpose |
 |------|---------|---------|
-| `--acceptance` | create, update | Machine-readable acceptance test command |
+| `--acceptance` | create, update | Machine-readable acceptance criteria |
 | `-e, --estimate` | create, update | Time budget in minutes |
 | `-l, --labels` | create | Set labels at creation |
 | `--add-label` | update | Add label after creation |
@@ -100,7 +100,7 @@ Open → In Progress (claimed) → Closed (committed)
 | `scope:trivial/small/medium` | Lead | Estimated change size | `-l scope:small` on create |
 | `needs-redecomp` | Reviewer | Spec failed twice, Lead must rewrite | `--add-label needs-redecomp` on update |
 | `integration-risk` | Reviewer | Merged work may conflict | `--add-label integration-risk` on update |
-| `test-suspect` | Reviewer | Acceptance test may be wrong | `--add-label test-suspect` on update |
+| `test-suspect` | Reviewer | Acceptance criteria may be wrong | `--add-label test-suspect` on update |
 | `needs-integration-review` | Lead | Epic ready for full-scope review | `--add-label needs-integration-review` on update |
 
 ## Customization

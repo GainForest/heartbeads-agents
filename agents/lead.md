@@ -1,5 +1,5 @@
 ---
-description: Decomposes work into heartbeads issues with acceptance tests. Use for planning, architecture, and task breakdown.
+description: Decomposes work into heartbeads issues with acceptance criteria. Use for planning, architecture, and task breakdown.
 mode: primary
 model: anthropic/claude-opus-4-6
 temperature: 0.3
@@ -44,10 +44,10 @@ hb create "Epic: <goal>" -t epic -p <priority> \
   -l scope:medium \
   --json
 
-# Create task — use --acceptance for acceptance critera, -e for time budget
+# Create task — use --acceptance for acceptance criteria, -e for time budget
 hb create "<task>" -t task -p <priority> --parent <epic-id> \
   -d "<spec per template above>" \
-  --acceptance "<acceptance critera that must pass>" \
+  --acceptance "<acceptance criteria that must pass>" \
   -e 60 \
   -l scope:small \
   --json
