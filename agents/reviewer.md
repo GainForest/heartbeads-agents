@@ -46,7 +46,6 @@ hb sync && git add .beads/ && git commit -m "beads: review finding $NEW_ID" && g
 **Spec failed twice on same issue type** → label for Lead re-decomposition:
 ```bash
 hb update <id> --add-label needs-redecomp
-hb sync && git add .beads/ && git commit -m "beads: needs-redecomp <id>" && git push
 ```
 
 **Merged work may conflict** → flag integration risk:
@@ -57,6 +56,11 @@ hb update <id> --add-label integration-risk
 **Acceptance test itself looks wrong** → flag it:
 ```bash
 hb update <id> --add-label test-suspect
+```
+
+Sync after labeling:
+```bash
+hb sync && git add .beads/ && git commit -m "beads: review labels" && git push
 ```
 
 10-minute limit per review. Pattern of repeated failures on same spec type → file a meta-issue for the Lead.
