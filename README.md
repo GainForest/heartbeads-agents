@@ -60,11 +60,11 @@ Break this feature into tasks...
 
 ## How It Works
 
-**Lead** writes hyper-specific issue specs with acceptance tests. The spec quality determines system throughput — a good spec means the worker finishes in under an hour with zero questions. The graph should be readable cold by anyone, including the Lead after total context loss.
+**Lead** writes hyper-specific issue specs with acceptance tests. Epics get `-d` descriptions with goals and context. Tasks get structured specs in `-d`, a machine-readable test in `--acceptance`, a time budget via `-e 60`, and scope labels via `-l`. The spec quality determines system throughput — a good spec means the worker finishes in under an hour with zero questions.
 
-**Worker** claims one issue (`hb update <id> --claim`), implements it in only the listed files, runs the acceptance test, commits, closes with the commit hash (`hb close <id> --reason "<hash> <msg>"`), and stops. Blockers are filed as new issues, not worked around.
+**Worker** claims one issue (`hb update <id> --claim`), reads the spec and `acceptance_criteria` field, implements in only the listed files, runs the acceptance test, commits, closes with the commit hash (`hb close <id> --reason "<hash> <msg>"`), and stops. Blockers are filed as new issues, not worked around.
 
-**Reviewer** checks recently closed work against specs retroactively. Problems become new issues linked to the original via `discovered-from` dependency. The reviewer never reopens or rewrites — it files forward.
+**Reviewer** checks recently closed work against specs retroactively. Problems become new issues linked to the original via `discovered-from` dependency. Labels like `needs-redecomp`, `integration-risk`, and `test-suspect` are set via `--add-label`. The reviewer never reopens or rewrites — it files forward.
 
 ## Issue Lifecycle
 
@@ -81,15 +81,27 @@ Open → In Progress (claimed) → Closed (committed)
 
 **Sync after every graph change:** `hb sync && git add .beads/ && git commit -m "beads: <action> <id>" && git push`
 
+**Key flags:**
+
+| Flag | Command | Purpose |
+|------|---------|---------|
+| `--acceptance` | create, update | Machine-readable acceptance test command |
+| `-e, --estimate` | create, update | Time budget in minutes |
+| `-l, --labels` | create | Set labels at creation |
+| `--add-label` | update | Add label after creation |
+| `--claim` | update | Atomically set assignee + status=in_progress |
+| `--silent` | create | Output only issue ID (for scripting) |
+| `--deps` | create | Inline dependencies at creation |
+
 **Labels:**
 
-| Label | Set by | Meaning |
-|-------|--------|---------|
-| `scope:trivial/small/medium` | Lead | Estimated change size |
-| `needs-redecomp` | Reviewer | Spec failed twice, Lead must rewrite |
-| `integration-risk` | Reviewer | Merged work may conflict |
-| `test-suspect` | Reviewer | Acceptance test may be wrong |
-| `needs-integration-review` | Lead | Epic ready for full-scope review |
+| Label | Set by | Meaning | Command |
+|-------|--------|---------|---------|
+| `scope:trivial/small/medium` | Lead | Estimated change size | `-l scope:small` on create |
+| `needs-redecomp` | Reviewer | Spec failed twice, Lead must rewrite | `--add-label needs-redecomp` on update |
+| `integration-risk` | Reviewer | Merged work may conflict | `--add-label integration-risk` on update |
+| `test-suspect` | Reviewer | Acceptance test may be wrong | `--add-label test-suspect` on update |
+| `needs-integration-review` | Lead | Epic ready for full-scope review | `--add-label needs-integration-review` on update |
 
 ## Customization
 

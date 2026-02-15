@@ -19,19 +19,21 @@ hb init && hb sync
 # Find and claim
 hb list --status in_progress      # resume if already claimed
 hb ready                           # or pick top ready
-hb update <id> --claim
+hb update <id> --claim             # atomically sets assignee + status=in_progress
 hb sync && git add .beads/ && git commit -m "beads: claim <id>" && git push
 
 # Read spec fully, then implement in ONLY listed files
 hb show <id> --json
+# The acceptance_criteria field has the exact test command
 
-# Test
-<command from spec "Test">
+# Test — run the command from acceptance_criteria
+<command from acceptance_criteria>
 
 # Pass → commit and close
 git add <allowed files only>
 git commit -m "<summary> (<id>)"
-hb close <id> --reason "<hash> <summary>"
+HASH=$(git rev-parse --short HEAD)
+hb close <id> --reason "$HASH <summary>"
 hb sync && git add .beads/ && git commit -m "beads: close <id>" && git push
 ```
 
@@ -46,11 +48,19 @@ Only listed files. No new dependencies. No refactoring outside scope. 2 test att
 ```bash
 hb update <id> --status blocked --notes "Blocked: <what>"
 hb create "Blocker: <id> — <why>" -t bug -p 1 \
-  -d "Tried: <approach>. Error: <o>. Likely cause: <hypothesis>."
+  -d "Tried: <approach>. Error: <error-output>. Likely cause: <hypothesis>." \
+  --silent
+# Capture the ID from --silent output, then link it
 hb dep add <blocker-id> <id> --type discovered-from
 hb sync && git add .beads/ && git commit -m "beads: block <id>" && git push
 ```
 
 ## Found Unrelated Work
 
-`hb create "Found: <what>" -t bug -p 2 && hb dep add <new> <current> --type discovered-from`. Continue your task.
+```bash
+NEW_ID=$(hb create "Found: <what>" -t bug -p 2 \
+  -d "<what you found and where>" --silent)
+hb dep add "$NEW_ID" <current> --type discovered-from
+```
+
+Continue your task.

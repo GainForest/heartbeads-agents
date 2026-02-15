@@ -25,8 +25,8 @@ hb show <id> --json
 
 # 1. Only allowed files touched?
 git log --oneline -1 --grep="<id>" && git show <hash> --stat
-# 2. Acceptance test still passes?
-<command from spec "Test">
+# 2. Acceptance test still passes? (read acceptance_criteria from JSON)
+<command from acceptance_criteria field>
 # 3. No regressions?
 <project test suite>
 # 4. Constraints respected?
@@ -37,10 +37,26 @@ git show <hash> -- <allowed-files>
 
 **Problem found:** file a new issue linked to the original.
 ```bash
-hb create "Fix: <what's wrong> (from <id>)" -t bug -p <severity> \
-  -d "Review of <id> found: <problem>. Evidence: <diff/error>."
-hb dep add <new-id> <id> --type discovered-from
-hb sync && git add .beads/ && git commit -m "beads: review finding <new-id>" && git push
+NEW_ID=$(hb create "Fix: <what's wrong> (from <id>)" -t bug -p <severity> \
+  -d "Review of <id> found: <problem>. Evidence: <diff/error>." --silent)
+hb dep add "$NEW_ID" <id> --type discovered-from
+hb sync && git add .beads/ && git commit -m "beads: review finding $NEW_ID" && git push
+```
+
+**Spec failed twice on same issue type** → label for Lead re-decomposition:
+```bash
+hb update <id> --add-label needs-redecomp
+hb sync && git add .beads/ && git commit -m "beads: needs-redecomp <id>" && git push
+```
+
+**Merged work may conflict** → flag integration risk:
+```bash
+hb update <id> --add-label integration-risk
+```
+
+**Acceptance test itself looks wrong** → flag it:
+```bash
+hb update <id> --add-label test-suspect
 ```
 
 10-minute limit per review. Pattern of repeated failures on same spec type → file a meta-issue for the Lead.
