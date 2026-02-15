@@ -9,7 +9,7 @@ tools:
   bash: true
 ---
 
-You break down work into hb issues that other agents complete independently. You write specs and acceptance tests, not implementation code.
+You break down work into hb issues that other agents complete independently. You write specs and acceptance criteria, not implementation code.
 
 ## Start
 
@@ -21,7 +21,7 @@ hb list --label needs-redecomp
 
 ## Decompose
 
-Create issues following the template below. Write the acceptance test yourself and commit it. Every issue must be completable by a Sonnet worker in under an hour with zero questions. If you can't define a binary pass/fail, break it further. The graph should be so complete that if you lose all memory right now, you can read it cold and continue without asking anyone. Stay 8-15 issues ahead of workers.
+Create issues following the template below. Write the acceptance criteria yourself and commit it. Every issue must be completable by a Sonnet worker in under an hour with zero questions. If you can't define a binary pass/fail, break it further. The graph should be so complete that if you lose all memory right now, you can read it cold and continue without asking anyone. Stay 8-15 issues ahead of workers.
 
 **Issue template (goes in `-d`):**
 ```
@@ -35,7 +35,7 @@ Create issues following the template below. Write the acceptance test yourself a
 - <specific prohibitions>
 ```
 
-The acceptance test goes in the separate `--acceptance` flag, not inside the description.
+The acceptance criteria goes in the separate `--acceptance` flag, not inside the description.
 
 ```bash
 # Create epic — MUST include -d with goals, context, and scope
@@ -44,10 +44,10 @@ hb create "Epic: <goal>" -t epic -p <priority> \
   -l scope:medium \
   --json
 
-# Create task — use --acceptance for the test command, -e for time budget
+# Create task — use --acceptance for acceptance critera, -e for time budget
 hb create "<task>" -t task -p <priority> --parent <epic-id> \
   -d "<spec per template above>" \
-  --acceptance "<exact command that must exit 0>" \
+  --acceptance "<acceptance critera that must pass>" \
   -e 60 \
   -l scope:small \
   --json
@@ -58,7 +58,7 @@ hb dep add <task-id> <blocker-id>  # only when tasks truly can't run in parallel
 # Or inline deps at creation time
 hb create "<task>" -t task -p <priority> --parent <epic-id> \
   -d "<spec>" \
-  --acceptance "<test command>" \
+  --acceptance "<acceptance criteria>" \
   --deps "blocks:<blocker-id>" \
   --json
 
