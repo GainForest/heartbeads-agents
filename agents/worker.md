@@ -1,7 +1,7 @@
 ---
 description: Picks up one heartbeads issue, implements it, closes it. Invoke with @worker or delegate from lead.
 mode: subagent
-model: anthropic/claude-sonnet-4-5
+model: anthropic/claude-sonnet-4-6
 temperature: 0.2
 tools:
   write: true

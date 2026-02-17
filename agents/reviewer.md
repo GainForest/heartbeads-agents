@@ -1,7 +1,7 @@
 ---
 description: Retroactively reviews closed heartbeads issues. Files new issues for problems found. Invoke with @reviewer periodically or on integration.
 mode: subagent
-model: anthropic/claude-sonnet-4-5
+model: anthropic/claude-sonnet-4-6
 temperature: 0.1
 tools:
   write: false
