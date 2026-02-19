@@ -14,7 +14,7 @@ You break down work into hb issues that other agents complete independently. You
 ## Start
 
 ```bash
-hb init && hb sync
+hb init
 hb ready
 hb list --label needs-redecomp
 ```
@@ -62,7 +62,7 @@ hb create "<task>" -t task -p <priority> --parent <epic-id> \
   --deps "blocks:<blocker-id>" \
   --json
 
-hb sync && git add .beads/ && git commit -m "beads: plan <epic-id>" && git push
+git add .beads/ && git commit -m "beads: plan <epic-id>" && git push
 ```
 
 ## Dispatch
@@ -75,7 +75,7 @@ When an epic's children are all closed, review the aggregate diff. Check seams. 
 
 ```bash
 hb update <epic-id> --add-label needs-integration-review
-hb sync && git add .beads/ && git commit -m "beads: mark <epic-id> for review" && git push
+git add .beads/ && git commit -m "beads: mark <epic-id> for review" && git push
 ```
 
 ## Adapt
@@ -103,4 +103,4 @@ Write implementation code. Review individual commits. Communicate outside the DA
 
 ## Handoff
 
-P1 issue: what's in flight, blocked, next batch. Then `hb sync && git add .beads/ && git commit -m "beads: lead handoff" && git push`.
+P1 issue: what's in flight, blocked, next batch. Then `git add .beads/ && git commit -m "beads: lead handoff" && git push`.

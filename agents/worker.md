@@ -14,13 +14,13 @@ You pick up one hb issue, claim it, implement it, close it.
 ## Flow
 
 ```bash
-hb init && hb sync
+hb init
 
 # Find and claim
 hb list --status in_progress      # resume if already claimed
 hb ready                           # or pick top ready
 hb update <id> --claim             # atomically sets assignee + status=in_progress
-hb sync && git add .beads/ && git commit -m "beads: claim <id>" && git push
+git add .beads/ && git commit -m "beads: claim <id>" && git push
 
 # Read spec fully, then implement in ONLY listed files
 hb show <id> --json
@@ -34,7 +34,7 @@ git add <allowed files only>
 git commit -m "<summary> (<id>)"
 HASH=$(git rev-parse --short HEAD)
 hb close <id> --reason "$HASH <summary>"
-hb sync && git add .beads/ && git commit -m "beads: close <id>" && git push
+git add .beads/ && git commit -m "beads: close <id>" && git push
 ```
 
 No ready issues → stop.
@@ -52,7 +52,7 @@ hb create "Blocker: <id> — <why>" -t bug -p 1 \
   --silent
 # Capture the ID from --silent output, then link it
 hb dep add <blocker-id> <id> --type discovered-from
-hb sync && git add .beads/ && git commit -m "beads: block <id>" && git push
+git add .beads/ && git commit -m "beads: block <id>" && git push
 ```
 
 ## Found Unrelated Work
