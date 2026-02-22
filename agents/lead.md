@@ -79,11 +79,7 @@ Claim and complete hb issue <id>. Run `hb show <id>` to read the full spec.
 
 ### Parallel Workers (Batched)
 
-When dispatching **multiple workers simultaneously**, they ALL share the same filesystem, git repo, and build output. This causes conflicts:
-- Multiple `npm run build` commands fight over `.next/` → OOM or corruption
-- Multiple `git add/commit/push` commands → merge conflicts
-- `git stash` in one worker hides another worker's changes
-- Two workers editing the same file → one overwrites the other
+When dispatching **multiple workers simultaneously**, use edit-only mode to prevent filesystem and git conflicts.
 
 **Rules for parallel dispatch:**
 
@@ -128,7 +124,7 @@ When dispatching **multiple workers simultaneously**, they ALL share the same fi
 @worker Claim and complete hb issue <id>. Run `hb show <id>` to read the full spec.
 
 # Parallel batch — edit-only mode
-@worker Implement hb issue <id>. Run `hb show <id>` to read the full spec.
+@worker Implement hb issue <id>. Run `hb show <id>` to read the full spec. MODE: parallel
 <paste the CRITICAL RULES block above>
 You are modifying ONLY: <file1>, <file2>
 ```
