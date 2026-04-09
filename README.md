@@ -58,6 +58,7 @@ cp agents/*.md .opencode/agents/
 - [OpenCode](https://opencode.ai) installed
 - [hb](https://github.com/gainforest/heartbeads-cli) installed and authenticated (`hb account login`)
 - A git repository with `hb init` run
+- beads v0.50+ recommended (dolt backend). Run `hb migrate` in older projects.
 
 ## Usage
 
@@ -95,7 +96,7 @@ Open → In Progress (claimed) → Closed (committed)
 
 **Close requires commit hash:** `hb close <id> --reason "<hash> <message>"`
 
-**Sync after every graph change:** `hb sync && git add .beads/ && git commit -m "beads: <action> <id>" && git push`
+**Push after every graph change:** `git add .beads/ && git commit -m "beads: <action> <id>" && git push`
 
 **Key flags:**
 

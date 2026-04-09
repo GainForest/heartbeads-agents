@@ -14,7 +14,7 @@ You review recently closed issues against their specs. You don't gate merges —
 ## Start
 
 ```bash
-hb init && hb sync
+hb init
 hb list --status closed --json | head -20   # recent closures
 ```
 
@@ -40,7 +40,7 @@ git show <hash> -- <allowed-files>
 NEW_ID=$(hb create "Fix: <what's wrong> (from <id>)" -t bug -p <severity> \
   -d "Review of <id> found: <problem>. Evidence: <diff/error>." --silent)
 hb dep add "$NEW_ID" <id> --type discovered-from
-hb sync && git add .beads/ && git commit -m "beads: review finding $NEW_ID" && git push
+git add .beads/ && git commit -m "beads: review finding $NEW_ID" && git push
 ```
 
 **Spec failed twice on same issue type** → label for Lead re-decomposition:
@@ -60,7 +60,7 @@ hb update <id> --add-label test-suspect
 
 Sync after labeling:
 ```bash
-hb sync && git add .beads/ && git commit -m "beads: review labels" && git push
+git add .beads/ && git commit -m "beads: review labels" && git push
 ```
 
 10-minute limit per review. Pattern of repeated failures on same spec type → file a meta-issue for the Lead.
